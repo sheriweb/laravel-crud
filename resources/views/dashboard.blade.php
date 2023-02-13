@@ -82,10 +82,7 @@
                         $('#user-modal').modal('hide');
                         getUsers();
                     } else {
-                        $('#user_form')[0].reset();
-                        $('#user-modal').modal('hide');
                         toastr.warning('' + response.message + '', 'warning');
-                        getUsers();
                     }
                 }, error: function (reject) {
                     var response = $.parseJSON(reject.responseText);

@@ -2,13 +2,11 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Mail\NewUser;
+use App\Jobs\NewUser;
 use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 
 /**
  * Class UserRepository
@@ -68,14 +66,9 @@ class UserRepository implements BaseRepositoryInterface
                         $user->interests()->attach($request->interest_name);
                     }
 
-                    try {
-                        Mail::to($user->email)->send(new NewUser($user));
-                    } catch (Exception $e) {
-                        return response()->json([
-                            'status' => 401,
-                            'message' => 'email not send check your connection'
-                        ]);
-                    }
+                    $job = (new NewUser($user));
+
+                    dispatch($job);
 
                     return response()->json([
                         'status' => 200,
