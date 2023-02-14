@@ -125,10 +125,15 @@ class UserController extends Controller
 
     /**
      * @param int $id
-     * @return bool
+     * @return JsonResponse
      */
-    public function delete(int $id): bool
+    public function delete(int $id): JsonResponse
     {
-        return $this->userService->delete($id);
+         $this->userService->delete($id);
+
+         return response()->json([
+            'status'  => 200,
+            'message' => 'Data Deleted Successfully'
+         ]);
     }
 }

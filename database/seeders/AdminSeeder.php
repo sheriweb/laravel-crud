@@ -27,7 +27,7 @@ class AdminSeeder extends Seeder
             'mobile_number'    => '27 (0) 86 750 0333',
             'dob'              => '1997-04-14 00:00:00',
             'south_african_id_no' => 12345678,
-            'language'         => 'English',
+            'language'         => 'english',
         ]);
     }
 }

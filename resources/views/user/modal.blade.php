@@ -81,9 +81,9 @@
                                 <select class="form-control" name="language" id="language">
                                     <option value="">Select Option</option>
                                     <option value="english">English</option>
-                                    <option value="urdu">Urdu</option>
-                                    <option value="punjabi">Punjabi</option>
-                                    <option value="saraeke">Saraeke</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="hindi">Hindi</option>
+                                    <option value="chinese">Chinese</option>
                                 </select>
                                 <div class="text-danger clear-error" id="language_error"></div>
                             </div>
