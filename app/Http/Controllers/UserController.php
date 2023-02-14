@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserSaveRequest;
-use App\Models\Interest;
-use App\Models\User;
-use App\Repositories\Eloquent\UserRepository;
+use App\Jobs\NewUser;
+use App\Services\UserService;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -21,16 +20,16 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     /**
-     * @var UserRepository
+     * @var UserService
      */
-    private $userRepository;
+    private $userService;
 
     /**
-     * @param UserRepository $userRepository
+     * @param UserService $userService
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserService $userService)
     {
-        $this->userRepository = $userRepository;
+        $this->userService = $userService;
     }
 
     /**
@@ -38,9 +37,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $interests = Interest::all();
+        $interests = $this->userService->getInterests();
 
-        return view('dashboard',compact('interests'));
+        return view('dashboard', compact('interests'));
     }
 
     /**
@@ -51,7 +50,7 @@ class UserController extends Controller
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            $user = User::where('id','!=', 1)->get();
+            $user = $this->userService->getUsers();
 
             return Datatables::of($user)
                 ->addIndexColumn()
@@ -83,20 +82,52 @@ class UserController extends Controller
      */
     public function save(UserSaveRequest $request)
     {
-        return $this->userRepository->save($request);
-    }
+        if ($request->user_id) {
+            try {
+                $this->userService->updateUser($request->except('password'), $request->user_id);
 
-    public function find(int $id)
-    {
-        return $this->userRepository->find($id);
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Data Updated Successfully'
+                ]);
+            }catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        } else {
+            try {
+                $user = $this->userService->createUser($request->validated());
+
+                if (!empty($request->interest_name)) {
+                    $user->interests()->attach($request->interest_name);
+                }
+
+                NewUser::dispatch($user);
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Data Saved Successfully'
+                ]);
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        }
     }
 
     /**
      * @param int $id
-     * @return JsonResponse|string
+     * @return mixed
      */
-    public function delete(int $id)
+    public function find(int $id)
     {
-        return $this->userRepository->delete($id);
+        return $this->userService->getUser($id);
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id): bool
+    {
+        return $this->userService->delete($id);
     }
 }

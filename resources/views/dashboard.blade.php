@@ -53,7 +53,7 @@
 
         //Empty User Form
         $('.reset_user').click(function () {
-            $("#passwords").removeAttr("readonly");
+            $("#password").removeAttr("readonly");
             $("#email").removeAttr("readonly");
             $("#password_confirmation").removeAttr("readonly");
             $("#user_form")[0].reset();
@@ -128,9 +128,9 @@
                 method: 'get',
                 success: function (response) {
                     if (response.id) {
-                        $("#passwords").prop("readonly", true);
+                        $("#password").prop("readonly", true);
                         $("#email").prop("readonly", true);
-                        $('#passwords').val('');
+                        /*$('#passwords').val('');*/
                         $("#password_confirmation").prop("readonly", true);
                     }
 

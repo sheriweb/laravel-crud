@@ -46,7 +46,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" id="passwords" class="form-control" name="password">
+                                <input type="password" id="password" class="form-control" name="password">
                                 <div class="text-danger clear-error" id="password_error"></div>
                             </div>
                         </div>
