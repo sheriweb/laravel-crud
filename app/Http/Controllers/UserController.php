@@ -6,6 +6,7 @@ use App\Http\Requests\UserSaveRequest;
 use App\Models\Interest;
 use App\Models\User;
 use App\Repositories\Eloquent\UserRepository;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -42,11 +43,15 @@ class UserController extends Controller
         return view('dashboard',compact('interests'));
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     * @throws Exception
+     */
     public function get(Request $request)
     {
         if ($request->ajax()) {
-            /*$user = User::where('id','!=', 1)->get();*/
-            $user = User::all();
+            $user = User::where('id','!=', 1)->get();
 
             return Datatables::of($user)
                 ->addIndexColumn()
@@ -70,7 +75,6 @@ class UserController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-
     }
 
     /**
