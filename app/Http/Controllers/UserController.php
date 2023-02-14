@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
@@ -115,9 +116,9 @@ class UserController extends Controller
 
     /**
      * @param int $id
-     * @return mixed
+     * @return Model|null
      */
-    public function find(int $id)
+    public function find(int $id): ?Model
     {
         return $this->userService->getUser($id);
     }
