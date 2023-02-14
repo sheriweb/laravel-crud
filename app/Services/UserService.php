@@ -8,12 +8,17 @@ use App\Repositories\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class UserService
+ * @package App\Services
+ */
 class UserService
 {
     /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
+
     /**
      * @var InterestRepositoryInterface
      */
@@ -30,6 +35,7 @@ class UserService
     }
 
     /**
+     * @param int $id
      * @return Model|null
      */
     public function getUser(int $id): ?Model
@@ -73,6 +79,9 @@ class UserService
         return $this->userRepository->deleteById($id);
     }
 
+    /**
+     * @return mixed
+     */
     public function getUsers()
     {
         return $this->userRepository->getUsers();
